@@ -35,7 +35,7 @@
                             if ($row_img['profile_img_status'] == 0) 
                             {
                                 echo "
-                                    <img src='uploads/profile_".$user_id.".jpg'>";
+                                    <img src='uploads/profile_".$user_id.".jpg?'".mt_rand().">"; // mt_rand is used to help with the issue when browser remembers the actual image by it's file name
                             }
                             else
                             {
