@@ -34,8 +34,14 @@
                         <div class='user-container'>";
                             if ($row_img['profile_img_status'] == 0) 
                             {
+                                // get the uploaded image file extension
+                                $file_name = "uploads/profile_".$user_id."*";
+                                $file_info = glob($file_name);
+                                $file_ext = explode(".", $file_info[0]);
+                                $file_actual_ext = $file_ext[1];
+
                                 echo "
-                                    <img src='uploads/profile_".$user_id.".jpg?'".mt_rand().">"; // mt_rand is used to help with the issue when browser remembers the actual image by it's file name
+                                    <img src='uploads/profile_".$user_id.".".$file_actual_ext."?".mt_rand()."'>"; // mt_rand is used to help with the issue when browser remembers the actual image by it's file name
                             }
                             else
                             {
@@ -44,7 +50,8 @@
                             }
 
                             echo "
-                                <p class='p-title'>".$row_users['user_un']."</p>";
+                                <p class='p-title'>".$row_users['user_un']."<br>
+                                ".$row_users['user_fn']." ".$row_users['user_ln']."</p>";
                     echo "
                         </div>";
                 }
@@ -56,9 +63,9 @@
         }
 
         // check if the user is logged in
-        if (isset($_SESSION['id'])) 
+        if (isset($_SESSION['user_id'])) 
         {
-            if ($_SESSION['id'] == 1) 
+            if ($_SESSION['user_id'] == 1) 
             {
                 echo "You are logged in as user #1";
             }
@@ -68,6 +75,12 @@
                 <form action='upload.php' method='POST' enctype='multipart/form-data'>
                     <input type='file' name='file'>
                     <button type='submit' name='submit_upload'>Upload</button>
+                </form>";
+
+            // delete profile image form
+            echo "
+                <form action='delete.php' method='POST'>
+                    <button type='submit' name='submit_delete'>Delete Profile Img</button>
                 </form>";
         }
         else

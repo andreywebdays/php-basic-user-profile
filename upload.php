@@ -17,7 +17,7 @@ if (isset($_POST['submit_upload']))
     $file_ext = explode('.', $file_name); // create an array of strings divided by dot
     $file_actual_ext = strtolower(end($file_ext)); // take the last string in the array and change it (extension) to lowercase in case we received it with uppercase characters
 
-    $allowed_ext = array('jpg', 'jpeg', 'png', 'pdf');
+    $allowed_ext = array('jpg', 'jpeg', 'png');
 
     if (in_array($file_actual_ext, $allowed_ext)) {
         if ($file_error === 0) 
@@ -27,9 +27,16 @@ if (isset($_POST['submit_upload']))
                 // generate unique file name from a current timestamp and add extension
                 $file_name_new = "profile_".$user_id.".".$file_actual_ext; 
                 $file_destination = 'uploads/'.$file_name_new;
+
+                // delete the previous image of any types
+                foreach (glob("uploads/profile_{$user_id}.*") as $match) 
+                { 
+                    unlink($match); 
+                }
+
                 move_uploaded_file($file_tmp, $file_destination);
                 $sql = "UPDATE profile_imgs SET profile_img_status = 0 WHERE user_id = '$user_id';";
-                $result = mysqli_query($conn, $sql);
+                mysqli_query($conn, $sql);
                 header("location: index.php?upload-success"); // go back to original location
             }
             else
