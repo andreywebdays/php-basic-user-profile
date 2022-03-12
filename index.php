@@ -9,13 +9,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>PHP File Manager</title>
 </head>
 <body>
 
     <?php
         // list all the users from the DB
-        $sql_users = "SELECT * FROM users";
+        $sql_users = "SELECT * FROM users;";
         $result_users = mysqli_query($conn, $sql_users);
 
         if (mysqli_num_rows($result_users) > 0) 
@@ -24,13 +25,13 @@
             {
                 $user_id = $row_users['user_id'];
                 
-                $sql_img = "SELECT * FROM profile_imgs WHERE user_id = '$user_id'";
+                $sql_img = "SELECT * FROM profile_imgs WHERE user_id = '$user_id';";
                 $result_img = mysqli_query($conn, $sql_img);
 
                 while ($row_img = mysqli_fetch_assoc($result_img))
                 {
                     echo "
-                        <div>";
+                        <div class='user-container'>";
                             if ($row_img['profile_img_status'] == 0) 
                             {
                                 echo "
@@ -42,7 +43,8 @@
                                     <img src='uploads/profile_default.jpg'>";
                             }
 
-                            echo $row_users['user_un'];
+                            echo "
+                                <p class='p-title'>".$row_users['user_un']."</p>";
                     echo "
                         </div>";
                 }
@@ -72,7 +74,7 @@
         {
             echo "You are not logged in!";
             echo "
-                <form action='login.php' method='POST'>
+                <form action='signup.php' method='POST'>
                     <input type='text' name='first_name' placeholder='First name'>
                     <input type='text' name='last_name' placeholder='Last name'>
                     <input type='text' name='username' placeholder='Username'>

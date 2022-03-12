@@ -1,5 +1,9 @@
 <?php
 
+session_start();
+include_once 'dbh.php';
+$user_id = $_SESSION['user_id'];
+
 if (isset($_POST['submit_upload'])) 
 {
     $file = $_FILES['file'];
@@ -21,9 +25,11 @@ if (isset($_POST['submit_upload']))
             if ($file_size < 500000) // if less then 500000bytes ~ 500kb ~ 0.5mb
             { 
                 // generate unique file name from a current timestamp and add extension
-                $file_name_new = str_replace('.', '',uniqid('', true)).".".$file_actual_ext; 
+                $file_name_new = "profile_".$user_id.".".$file_actual_ext; 
                 $file_destination = 'uploads/'.$file_name_new;
                 move_uploaded_file($file_tmp, $file_destination);
+                $sql = "UPDATE profile_imgs SET profile_img_status = 0 WHERE user_id = '$user_id';";
+                $result = mysqli_query($conn, $sql);
                 header("location: index.php?upload-success"); // go back to original location
             }
             else
